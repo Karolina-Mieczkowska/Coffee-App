@@ -1,0 +1,59 @@
+/* html,
+body {
+    height: 90%;
+} */
+
+body {
+    background-image: url('background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #f8f9fa;
+    color: #4d5c6c;
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+}
+
+.header {
+    /* height: 20%; */
+    padding: 0 1rem;
+}
+
+.header__title {
+    font-family: 'Montserrat', sans-serif;
+    text-align: right;
+    padding-left: 30%;
+}
+
+.header__subtitle {
+    font-weight: 400;
+}
+
+.main {
+    /* height: 80%; */
+    margin: 0 1rem;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-gap: 1rem;
+    /* height: 100%; */
+}
+
+.coffee {
+    padding: 1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    background: #f8f9fa;
+}
+
+.coffee__type {
+    font-size: 1.25rem;
+}
+
+@media only screen and (min-width: 1200px) {
+    .products {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+}
