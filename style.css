@@ -4,10 +4,7 @@ body {
 } */
 
 body {
-    background-image: url('background.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: #f8f9fa;
+    background-color: #e9ecef;
     color: #4d5c6c;
     font-family: 'Open Sans', sans-serif;
     margin: 0;
@@ -15,22 +12,30 @@ body {
 
 .header {
     /* height: 20%; */
-    padding: 0 1rem;
+    background-image: url('background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 0 1rem 1rem;
+    text-align: right;
 }
 
 .header__title {
     font-family: 'Montserrat', sans-serif;
-    text-align: right;
+    /* text-align: right; */
     padding-left: 30%;
+    padding-top: 1rem;
+    margin-top: 0;
 }
 
 .header__subtitle {
-    font-weight: 400;
+    font-weight: 500;
+    padding-left: 50%;
 }
 
 .main {
     /* height: 80%; */
     margin: 0 1rem;
+    padding: 1rem 0;
 }
 
 .products {
@@ -40,6 +45,83 @@ body {
     grid-gap: 1rem;
     /* height: 100%; */
 }
+
+/* MANAGE */
+
+.manage {
+    display: none;
+    height: 100vh;
+    width: 100%;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.manage__title {
+    display: flex;
+    font-size: 1rem;
+    border-bottom: 3px solid #4d5c6c;
+}
+
+.manage__title h2 {
+    margin: .75rem;
+}
+
+.manage__form {
+    text-align: center;
+    font-size: 1.75rem;
+    /* height: 80vh; */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90%;
+}
+
+.manage__quantity {
+    color: #2d363f;
+}
+
+.manage__product {
+    /* font-size: 2.25rem; */
+    margin: 20% 0 .75rem 0;
+    display: block;
+}
+
+.manage__price {
+    display: block;
+    /* font-size: 1.75rem; */
+    font-weight: 600;
+    /* margin: 1.25rem 0; */
+}
+
+.btn__quantity {
+    margin: 20% 0 .75rem 0;
+    font-size: 2.25rem;
+}
+
+.quantity__input {
+    margin: 20% 0 .75rem 0;
+    text-align: center;
+    font-size: 2.25rem;
+    width: 5rem;
+}
+
+.manage__btn {
+    font-size: 1.25rem;
+    margin: 1rem;
+    padding: .75rem;
+    justify-content: space-between;
+    /* box-sizing: border-box; */
+    text-align: left;
+}
+
+.btn__price {
+    float: right;
+} 
 
 .coffee {
     padding: 1rem;
@@ -53,6 +135,13 @@ body {
 }
 
 @media only screen and (min-width: 1200px) {
+
+    body {
+        background-image: url('background.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
     .products {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     }
