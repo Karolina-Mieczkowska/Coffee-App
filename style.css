@@ -89,14 +89,15 @@ body {
 
 .manage__quantity {
     color: #2d363f;
-    height: 60%;
     padding: 0 1.75rem;
 }
 
 .manage__product {
-    font-size: 2.75rem;
+    font-size: 2.25rem;
     /* margin: 20% 0 .75rem 0; */
     display: block;
+    margin-bottom: 1.25rem;
+    margin-top: 5rem;
 }
 
 .manage__price {
