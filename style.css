@@ -3,6 +3,12 @@ body {
     height: 90%;
 } */
 
+:root {
+    --inactive-clr: #8c9cad;
+    --active-clr: #055ab4;
+    --btn-clr: #295b90;
+}
+
 body {
     background-color: #e9ecef;
     color: #4d5c6c;
@@ -83,11 +89,13 @@ body {
 
 .manage__quantity {
     color: #2d363f;
+    height: 60%;
+    padding: 0 1.75rem;
 }
 
 .manage__product {
-    /* font-size: 2.25rem; */
-    margin: 20% 0 .75rem 0;
+    font-size: 2.75rem;
+    /* margin: 20% 0 .75rem 0; */
     display: block;
 }
 
@@ -95,28 +103,52 @@ body {
     display: block;
     /* font-size: 1.75rem; */
     font-weight: 600;
-    /* margin: 1.25rem 0; */
-}
-
-.btn__quantity {
-    margin: 20% 0 .75rem 0;
-    font-size: 2.25rem;
+    margin: 1.25rem 0;
 }
 
 .quantity__input {
-    margin: 20% 0 .75rem 0;
+    /* margin: 20% 0 .75rem 0; */
     text-align: center;
-    font-size: 2.25rem;
+    font-size: 2.75rem;
     width: 5rem;
+    border: none;
+    padding: 1.75rem 0;
+}
+
+/* BUTTONS */
+
+.btn {
+    border: none;
+}
+
+.btn__back {
+    background: none;
+    color: #4d5c6c;
+}
+
+.btn__quantity {
+    /* margin: 20% 0 .75rem 0; */
+    font-size: 2.75rem;
+    background: none;
+}
+
+.state--inactive {
+    color: var(--inactive-clr);
+}
+
+.state--active {
+    color: var(--active-clr);
 }
 
 .manage__btn {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     margin: 1rem;
-    padding: .75rem;
+    padding: 1rem;
     justify-content: space-between;
     /* box-sizing: border-box; */
     text-align: left;
+    background: var(--btn-clr);
+    color: #fff;
 }
 
 .btn__price {
