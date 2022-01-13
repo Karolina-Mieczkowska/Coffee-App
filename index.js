@@ -72,7 +72,14 @@ coffeeData = [espresso, doubleEspresso, americano, flatWhite, latte, icedLatte];
 
 // ORDER DATABASE
 
-//
+function BasketOrder(title, price, quantity) {
+    
+    this.selectedProductTitle = title;
+    this.selectedProductPrice = price;
+    this.selectedProductQuantity = quantity;
+}
+
+const basketOrders = [];
 
 // FORMAT CURRENCY
 
@@ -107,6 +114,34 @@ const changeQuantity = function(selector, product) {
     managePrice.value = formatCurrency(changedPrice, product.locale, product.currency);
     btnPrice.textContent = formatCurrency(changedPrice, product.locale, product.currency);
 };
+
+// UPDATE BASKET
+
+const updateBasket = function(coffee) {
+
+    console.log(coffee.name);
+    console.log(managePrice.value);
+    console.log(quantityInput.value);
+    
+    const newOrder = new BasketOrder(coffee.name, managePrice.value, quantityInput.value);
+    basketOrders.push(newOrder);
+}
+
+// DISPLAY PRODUCTS SECTION
+
+const displayProductsSection = function() {
+
+    header.style.display = 'block';
+    productsSection.style.display = 'grid';
+    manageSection.style.display = 'none';
+}
+
+// DISPLAY BASKET
+
+const displayBasket = function() {
+
+    
+}
 
 // DISPLAY MANAGE SECTION
 
@@ -150,6 +185,11 @@ const displayManageSection = function(selector) {
     manageSection.appendChild(manageForm)
 
     quantityButtons = document.querySelectorAll('.btn__quantity');
+    quantityInput = document.querySelector('.quantity__input');
+    btnMinus = document.querySelector('.btn__quantity--minus');
+    managePrice = document.querySelector('.manage__price');
+    btnPrice = document.querySelector('.btn__price');
+    manageBtn = document.querySelector('.manage__btn');
 
     quantityButtons.forEach(function(button) {
 
@@ -164,10 +204,12 @@ const displayManageSection = function(selector) {
         })
     });
 
-    quantityInput = document.querySelector('.quantity__input');
-    btnMinus = document.querySelector('.btn__quantity--minus');
-    managePrice = document.querySelector('.manage__price');
-    btnPrice = document.querySelector('.btn__price');
+    manageBtn.addEventListener('click', function(ev) {
+        ev.preventDefault();
+
+        updateBasket(selectedCoffee);
+        displayProductsSection();
+    })
 }
 
 // dataTab = document.querySelector('.manage__form--any').dataset.tab;
