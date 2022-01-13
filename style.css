@@ -162,15 +162,15 @@ body {
     bottom: 0;
     width: 100%;
     /* height: 30vh; */
-    height: 15vh;
+    /* height: 15vh; */
     background: var(--btn-clr);
     font-size: 1.5rem;
     padding: 1rem;
     justify-content: space-between;
     text-align: left;
     color: #fff;
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+    display: none;
+    grid-template-columns: 64px 3fr;
     grid-template-rows: 50% 50%;
     grid-gap: .5rem;
     grid-template-areas: 
@@ -207,17 +207,17 @@ body {
     height: 1rem;
     width: 1rem;
     text-align: center;
-    margin-right: 1rem;
+    /* margin-right: 1rem; */
 }
 
 .basket__price {
     grid-area: price;
-    background: rosybrown;
+    margin-left: 1rem;
 }
 
 .basket__reference {
     grid-area: reference;
-    background: slateblue;
+    margin-left: 1rem;
 }
 
 /* .basket__quantity {

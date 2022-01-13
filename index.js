@@ -1,11 +1,25 @@
 const header = document.querySelector('.header')
+const main = document.querySelector('.main');
 const productsSection = document.querySelector('.products');
 const manageSection = document.querySelector('.manage');
 // const coffeeSelector = document.querySelectorAll('.coffee');
 const manageForm = document.querySelectorAll('.manage__form');
 // const main = document.querySelector('.main');
 const manageTitle = document.querySelector('.manage__title--h2');
+const manageProduct = document.querySelector('.manage__product');
+const btnPrice = document.querySelector('.btn__price');
+const managePrice = document.querySelector('.manage__price');
 
+const quantityButtons = document.querySelectorAll('.btn__quantity');
+const quantityInput = document.querySelector('.quantity__input');
+const btnMinus = document.querySelector('.btn__quantity--minus');
+const manageBtn = document.querySelector('.manage__btn');
+
+const btnBasket = document.querySelector('.btn__basket');
+const basketQuantity = document.querySelector('.basket__quantity--output');
+const basketPrice = document.querySelector('.basket__price');
+
+const btnPlus = document.querySelector('.btn__quantity--plus');
 
 // manageSection.style.display = 'block';
 // document.querySelector('body').style.overflow = 'hidden';
@@ -96,7 +110,7 @@ const changeQuantity = function(selector, product) {
 
     if (selector === 'plus' && quantityInput.value >= 1) {
         
-        quantityInput.value++
+        quantityInput.value++;
         btnMinus.classList.remove('state--inactive');
         
     } else if (selector === 'minus' && document.querySelector('.quantity__input').value != 1) {
@@ -111,9 +125,23 @@ const changeQuantity = function(selector, product) {
     }
 
     const changedPrice = product.price * quantityInput.value
+    console.log(changedPrice);
     managePrice.value = formatCurrency(changedPrice, product.locale, product.currency);
     btnPrice.textContent = formatCurrency(changedPrice, product.locale, product.currency);
 };
+
+// const addQuantity = function(product) {
+
+//     if (quantityInput.value >= 1) {
+
+//         quantityInput.value++;
+//         btnMinus.classList.remove('state--inactive');
+//     }
+
+//     const changedPrice = product.price * quantityInput.value
+//     managePrice.value = formatCurrency(changedPrice, product.locale, product.currency);
+//     btnPrice.textContent = formatCurrency(changedPrice, product.locale, product.currency);
+// }
 
 // UPDATE BASKET
 
@@ -140,76 +168,164 @@ const displayProductsSection = function() {
 
 const displayBasket = function() {
 
-    
+    main.style.paddingBottom = '96px';
+
+    // const quantity = basketOrders
+    // .map(function(order) {
+        
+    //     return order.selectedProductQuantity;
+    // }).reduce(function(acc, curr) {
+    //     return acc + curr;
+    // })
+
+    // const price = basketOrders
+    // .map(function(order) {
+        
+    //     return order.selectedProductPrice;
+    // }).reduce(function(acc, curr) {
+    //     return acc + curr;
+    // })
+
+    const quantity = basketOrders.map(function(order) {
+        return Number(order.selectedProductQuantity);
+    }).reduce(function(acc, curr) {
+        return acc + curr;
+    })
+
+    const price = basketOrders.map(function(order) {
+        return order.selectedProductPrice;
+    })
+
+    console.log(price);
+
+    btnBasket.style.display = 'grid';
+    basketQuantity.textContent = quantity;
+    basketPrice.textContent = price;
+
+    // const basket = `
+    //     <button class="btn btn__basket">
+    //         <div class="basket__quantity">
+    //             <object class="basket__quantity--icon" data="basket.svg" type="image/svg+xml"></object>
+    //         </div>
+    //         <div class="basket__quantity">
+    //             <span class="basket__quantity--output">${quantity}</span>
+    //         </div>
+    //         <div class="basket__price">${price}</div>
+    //         <div class="basket__reference">Go to checkout!</div>
+    //     </button>
+    // `
+
+    // main.insertAdjacentHTML('beforeend', basket);
 }
 
 // DISPLAY MANAGE SECTION
 
-const displayManageSection = function(selector) {
+const displayManageSection = function(coffee) {
 
-    const selectedCoffee = coffeeData.find(function(coffee) {
-        return coffee.name === selector.dataset.tab;
-    })
+    // const selectedCoffee = coffeeData.find(function(coffee) {
+    //     return coffee.name === selector.dataset.tab;
+    // })
+
 
     manageTitle.textContent = 'Choose quantity';
-
-    console.log(selectedCoffee);
-
-    const coffeePrice = formatCurrency(selectedCoffee.price, selectedCoffee.locale, selectedCoffee.currency);
-
     header.style.display = 'none';
     productsSection.style.display = 'none';
     manageSection.style.display = 'block';
 
-    const manageForm = document.createElement('form');
+    quantityInput.value = '1';
+    btnBasket.style.display = 'none';
 
-    manageForm.classList.add('manage__form');
-    manageForm.classList.add('manage__form--choose');
+    const coffeePrice = formatCurrency(coffee.price, coffee.locale, coffee.currency);
+    manageProduct.textContent = coffee.name;
+    managePrice.textContent = coffeePrice;
+    btnPrice.textContent = coffeePrice;
 
-    const formContent = `
-        <div class="manage__quantity">
-            <p class="manage__product manage__product--choose">${selectedCoffee.name}</p>
-            <output class="manage__price manage__price--choose">${coffeePrice}</output>
-            <button class="btn btn__quantity btn__quantity--minus state--inactive">&#8722;</button>
-            <input type="number" value="1" class="quantity__input quantity__input--choose">
-            <button class="btn btn__quantity btn__quantity--plus state--active">&#x2B;</button>
-        </div>
-        <button class="btn manage__btn manage__btn--add" type="submit">
-            Add to order
-            <span class="btn__price">${coffeePrice}</span>
-        </button>
-    `
+    console.log(coffee.price);
 
-    manageForm.innerHTML = formContent;
+    // quantityButtons.forEach(function(button) {
 
-    manageSection.appendChild(manageForm)
+    //     button.addEventListener('click', function(ev) {
+    //         ev.preventDefault();
+    //         console.log(ev);
+    
+    //         const quantitySelector = button.classList.contains('btn__quantity--plus') ? 'plus' : 'minus';
+    
+    //         changeQuantity(quantitySelector, coffee);
+    //     })
+    // });
 
-    quantityButtons = document.querySelectorAll('.btn__quantity');
-    quantityInput = document.querySelector('.quantity__input');
-    btnMinus = document.querySelector('.btn__quantity--minus');
-    managePrice = document.querySelector('.manage__price');
-    btnPrice = document.querySelector('.btn__price');
-    manageBtn = document.querySelector('.manage__btn');
+    // btnPlus.addEventListener('click', function(ev) {
+    //     ev.preventDefault();
+    
+    //     addQuantity(coffee);
+    // })
 
-    quantityButtons.forEach(function(button) {
+    // manageBtn.addEventListener('click', function(ev) {
+    //     ev.preventDefault();
 
-        button.addEventListener('click', function(ev) {
-            ev.preventDefault();
+    //     updateBasket(coffee);
+    //     displayProductsSection();
+    //     displayBasket();
+    // })
 
-            const quantitySelector = button.classList.contains('btn__quantity--plus') ? 'plus' : 'minus';
+    // console.log(selectedCoffee);
 
-            console.log(quantitySelector);
+    // const coffeePrice = formatCurrency(selectedCoffee.price, selectedCoffee.locale, selectedCoffee.currency);
 
-            changeQuantity(quantitySelector, selectedCoffee);
-        })
-    });
+    // header.style.display = 'none';
+    // productsSection.style.display = 'none';
+    // manageSection.style.display = 'block';
 
-    manageBtn.addEventListener('click', function(ev) {
-        ev.preventDefault();
+    // const manageForm = document.createElement('form');
 
-        updateBasket(selectedCoffee);
-        displayProductsSection();
-    })
+    // manageForm.classList.add('manage__form');
+    // manageForm.classList.add('manage__form--choose');
+
+    // const formContent = `
+    //     <div class="manage__quantity">
+    //         <p class="manage__product manage__product--choose">${selectedCoffee.name}</p>
+    //         <output class="manage__price manage__price--choose">${coffeePrice}</output>
+    //         <button class="btn btn__quantity btn__quantity--minus state--inactive">&#8722;</button>
+    //         <input type="number" value="1" class="quantity__input quantity__input--choose">
+    //         <button class="btn btn__quantity btn__quantity--plus state--active">&#x2B;</button>
+    //     </div>
+    //     <button class="btn manage__btn manage__btn--add" type="submit">
+    //         Add to order
+    //         <span class="btn__price">${coffeePrice}</span>
+    //     </button>
+    // `
+
+    // manageForm.innerHTML = formContent;
+
+    // manageSection.appendChild(manageForm)
+
+    // quantityButtons = document.querySelectorAll('.btn__quantity');
+    // quantityInput = document.querySelector('.quantity__input');
+    // btnMinus = document.querySelector('.btn__quantity--minus');
+    // managePrice = document.querySelector('.manage__price');
+    // btnPrice = document.querySelector('.btn__price');
+    // manageBtn = document.querySelector('.manage__btn');
+
+    // quantityButtons.forEach(function(button) {
+
+    //     button.addEventListener('click', function(ev) {
+    //         ev.preventDefault();
+
+    //         const quantitySelector = button.classList.contains('btn__quantity--plus') ? 'plus' : 'minus';
+
+    //         console.log(quantitySelector);
+
+    //         changeQuantity(quantitySelector, selectedCoffee);
+    //     })
+    // });
+
+    // manageBtn.addEventListener('click', function(ev) {
+    //     ev.preventDefault();
+
+    //     updateBasket(selectedCoffee);
+    //     displayProductsSection();
+    //     displayBasket();
+    // })
 }
 
 // dataTab = document.querySelector('.manage__form--any').dataset.tab;
@@ -220,13 +336,19 @@ const displayManageSection = function(selector) {
 
 // SELECTING COFFEE
 
+let selectedCoffee;
+
 productsSection.addEventListener('click', function(ev) {
 
     const clicked = ev.target.closest('.coffee');
 
-    const dataTab = 'choose';
+    // const dataTab = 'choose';
 
-    displayManageSection(clicked);
+    selectedCoffee = coffeeData.find(function(coffee) {
+        return coffee.name === clicked.dataset.tab;
+    })
+
+    displayManageSection(selectedCoffee);
 })
 
 // DISPLAY COFFEE
@@ -243,6 +365,29 @@ coffeeData.forEach(function(coffee) {
     ` 
 
     productsSection.insertAdjacentHTML('beforeend', coffeeSelector);
+})
+
+// QUANTITY BUTTONS
+
+quantityButtons.forEach(function(button) {
+
+    button.addEventListener('click', function(ev) {
+        ev.preventDefault();
+
+        const quantitySelector = button.classList.contains('btn__quantity--plus') ? 'plus' : 'minus';
+
+        changeQuantity(quantitySelector, selectedCoffee);
+    })
+});
+
+// MANAGE BUTTON
+
+manageBtn.addEventListener('click', function(ev) {
+    ev.preventDefault();
+
+    updateBasket(selectedCoffee);
+    displayProductsSection();
+    displayBasket();
 })
 
 // displayManageSection();
