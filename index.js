@@ -148,10 +148,13 @@ const changeQuantity = function(selector, product) {
 const updateBasket = function(coffee) {
 
     console.log(coffee.name);
+    console.log(coffee.price * quantityInput.value);
     console.log(managePrice.value);
     console.log(quantityInput.value);
+
+    const price = coffee.price * quantityInput.value;
     
-    const newOrder = new BasketOrder(coffee.name, managePrice.value, quantityInput.value);
+    const newOrder = new BasketOrder(coffee.name, price, quantityInput.value);
     basketOrders.push(newOrder);
 }
 
@@ -194,13 +197,15 @@ const displayBasket = function() {
 
     const price = basketOrders.map(function(order) {
         return order.selectedProductPrice;
+    }).reduce(function(acc, curr) {
+        return acc + curr;
     })
 
     console.log(price);
 
     btnBasket.style.display = 'grid';
     basketQuantity.textContent = quantity;
-    basketPrice.textContent = price;
+    basketPrice.textContent = formatCurrency(price, selectedCoffee.locale, selectedCoffee.currency);
 
     // const basket = `
     //     <button class="btn btn__basket">
