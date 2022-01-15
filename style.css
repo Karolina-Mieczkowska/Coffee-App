@@ -152,6 +152,13 @@ body {
     color: #fff;
 }
 
+.btn__remove {
+    font-size: 1.25rem;
+    padding: .75rem;
+    color: tomato;
+    background: none;
+}
+
 .btn__price {
     float: right;
 } 
