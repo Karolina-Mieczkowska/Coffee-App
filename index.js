@@ -115,14 +115,47 @@ const changeQuantity = function(selector, product) {
     btnPrice.textContent = formatCurrency(changedPrice, product.locale, product.currency);
 };
 
+// ADD ORDER
+
+const addOrder = function(product) {
+
+    const price = product.price * quantityInput.value;
+    
+    const newOrder = new BasketOrder(product.name, price, quantityInput.value, product.currency);
+
+    basketOrders.push(newOrder);
+}
+
+// DELETE ORDER 
+
+const deleteOrder = function(orders, product) {
+
+    const index = orders.findIndex(function(order) {
+        return order.name === product.name;
+    });
+
+    orders.splice(index, 1);
+}
+
 // UPDATE BASKET
 
 const updateBasket = function(coffee) {
 
-    const price = coffee.price * quantityInput.value;
+    if (manageBtn.classList.contains('manage__btn--add')) {
+
+        addOrder(coffee);
+    }
+
+    if (manageBtn.classList.contains('manage__btn--edit')) {
+
+        deleteOrder(basketOrders, coffee);
+        addOrder(coffee);
+    }
+
+    // const price = coffee.price * quantityInput.value;
     
-    const newOrder = new BasketOrder(coffee.name, price, quantityInput.value, coffee.currency);
-    basketOrders.push(newOrder);
+    // const newOrder = new BasketOrder(coffee.name, price, quantityInput.value, coffee.currency);
+    // basketOrders.push(newOrder);
 }
 
 // DISPLAY PRODUCTS SECTION
@@ -138,32 +171,47 @@ const displayProductsSection = function() {
 
 const displayBasket = function() {
 
-    main.style.paddingBottom = '96px';
+    if (basketOrders.length > 0) {
 
-    const quantity = basketOrders.map(function(order) {
-        return Number(order.quantity);
-    }).reduce(function(acc, curr) {
-        return acc + curr;
-    })
+        main.style.paddingBottom = '96px';
 
-    const price = basketOrders.map(function(order) {
-        return order.price;
-    }).reduce(function(acc, curr) {
-        return acc + curr;
-    })
+        const quantity = basketOrders.map(function(order) {
+            return Number(order.quantity);
+        }).reduce(function(acc, curr) {
+            return acc + curr;
+        })
 
-    btnBasket.style.display = 'grid';
-    basketQuantity.textContent = quantity;
-    basketPrice.textContent = formatCurrency(price, selectedCoffee.locale, selectedCoffee.currency);
+        const price = basketOrders.map(function(order) {
+            return order.price;
+        }).reduce(function(acc, curr) {
+            return acc + curr;
+        })
+
+        btnBasket.style.display = 'grid';
+        basketQuantity.textContent = quantity;
+        basketPrice.textContent = formatCurrency(price, selectedCoffee.locale, selectedCoffee.currency);
+    }
 }
 
 // DISPLAY MANAGE SECTION
 
 const displayManageSection = function(coffee, quantity, ordered) {
 
-    manageTitle.textContent = !ordered ? 'Choose Quantity' : 'Edit quantity';
-    btnOrder.textContent = !ordered ? 'Add to order' : 'Update order';
-    btnRemove.style.display = !ordered ? 'none' : 'inline-block';
+    // manageTitle.textContent = !ordered ? 'Choose Quantity' : 'Edit quantity';
+    // btnOrder.textContent = !ordered ? 'Add to order' : 'Update order';
+    // btnRemove.style.display = !ordered ? 'none' : 'inline-block';
+    
+    if (!ordered) {
+        manageTitle.textContent = 'Choose Quantity';
+        btnOrder.textContent = 'Add to order';
+        btnRemove.style.display = 'none';
+        manageBtn.classList = 'btn manage__btn manage__btn--add';
+    } else {
+        manageTitle.textContent = 'Edit quantity';
+        btnOrder.textContent = 'Update order';
+        btnRemove.style.display = 'inline-block';
+        manageBtn.classList = 'btn manage__btn manage__btn--edit';
+    }
   
     header.style.display = 'none';
     productsSection.style.display = 'none';
@@ -242,6 +290,16 @@ manageBtn.addEventListener('click', function(ev) {
     ev.preventDefault();
 
     updateBasket(selectedCoffee);
+    displayProductsSection();
+    displayBasket();
+})
+
+// REMOVE FROM ORDER
+
+btnRemove.addEventListener('click', function(ev) {
+    ev.preventDefault();
+
+    deleteOrder(basketOrders, selectedCoffee);
     displayProductsSection();
     displayBasket();
 })
