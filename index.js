@@ -23,6 +23,9 @@ const btnPlus = document.querySelector('.btn__quantity--plus');
 const btnOrder = document.querySelector('.btn__order');
 const btnRemove = document.querySelector('.btn__remove');
 
+const manageQuantity = document.querySelector('.manage__quantity');
+const manageOrders = document.querySelector('.manage__orders');
+
 // PRODUCTS DATA
 
 espresso = {
@@ -165,6 +168,7 @@ const displayProductsSection = function() {
     header.style.display = 'block';
     productsSection.style.display = 'grid';
     manageSection.style.display = 'none';
+    // manageSection.forEach(section => section.style.display = 'none');
 }
 
 // DISPLAY BASKET
@@ -216,6 +220,9 @@ const displayManageSection = function(coffee, quantity, ordered) {
     header.style.display = 'none';
     productsSection.style.display = 'none';
     manageSection.style.display = 'block';
+    manageOrders.style.display = 'none';
+    manageQuantity.style.display = 'block';
+    // manageSection.forEach(section => section.style.display = 'block');
 
     quantityInput.value = quantity;
     btnBasket.style.display = 'none';
@@ -224,6 +231,22 @@ const displayManageSection = function(coffee, quantity, ordered) {
     manageProduct.textContent = coffee.name;
     managePrice.textContent = coffeePrice;
     btnPrice.textContent = coffeePrice;
+}
+
+// OPEN BASKET
+
+const displayBasketOrders = function() {
+
+    header.style.display = 'none';
+    productsSection.style.display = 'none';
+    manageSection.style.display = 'block';
+    manageQuantity.style.display = 'none';
+    manageOrders.style.display = 'block';
+    btnBasket.style.display = 'none';
+
+    manageTitle.textContent = 'Basket';
+    btnOrder.textContent = 'Complete order';
+    btnPrice.textContent = 'price';
 }
 
 // SELECTING COFFEE
@@ -303,4 +326,14 @@ btnRemove.addEventListener('click', function(ev) {
     displayProductsSection();
     displayBasket();
 })
+
+// SELECT BASKET
+
+btnBasket.addEventListener('click', function(ev) {
+    ev.preventDefault();
+
+    displayBasketOrders();
+})
+
+displayBasketOrders();
 
