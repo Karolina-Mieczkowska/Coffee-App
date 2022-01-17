@@ -25,49 +25,47 @@ const btnRemove = document.querySelector('.btn__remove');
 
 const manageQuantity = document.querySelector('.manage__quantity');
 const manageOrders = document.querySelector('.manage__orders');
+const orderRows = document.querySelector('.order__rows');
+const totalPrice = document.querySelector('.total__price');
+
+const locale = 'en-UK';
+const currency = 'GBP';
 
 // PRODUCTS DATA
 
 espresso = {
     name: 'Espresso',
-    price: 2.90,
-    locale: 'en-UK',
-    currency: 'GBP'
+    price: 2.90
 }
 
 doubleEspresso = {
     name: 'Double Espresso',
-    price: 3.50,
-    locale: 'en-UK',
-    currency: 'GBP'
+    price: 3.50
 }
 
 americano = {
     name: 'Americano',
-    price: 3.50,
-    locale: 'en-UK',
-    currency: 'GBP'
+    price: 3.50
 }
 
 flatWhite = {
     name: 'Flat White',
     price: 3.70,
-    locale: 'en-UK',
-    currency: 'GBP'
+}
+
+cappuccino = {
+    name: 'Cappuccino',
+    price: 3.90
 }
 
 latte = {
     name: 'Latte',
-    price: 3.90,
-    locale: 'en-UK',
-    currency: 'GBP'
+    price: 3.90
 }
 
 icedLatte = {
     name: 'Iced Latte',
-    price: 3.90,
-    locale: 'en-UK',
-    currency: 'GBP'
+    price: 3.90
 }
 
 coffeeData = [espresso, doubleEspresso, americano, flatWhite, latte, icedLatte];
@@ -114,16 +112,28 @@ const changeQuantity = function(selector, product) {
     }
 
     const changedPrice = product.price * quantityInput.value;
-    managePrice.value = formatCurrency(changedPrice, product.locale, product.currency);
-    btnPrice.textContent = formatCurrency(changedPrice, product.locale, product.currency);
+    managePrice.value = formatCurrency(changedPrice, locale, currency);
+    btnPrice.textContent = formatCurrency(changedPrice, locale, currency);
 };
+
+// CALCULATE TOTAL PRICE 
+
+const calculateTotalPrice = function(orders) {
+
+    const total = orders.map(function(order) {
+        return order.price;
+    }).reduce(function(acc, curr) {
+        return acc + curr;
+    })
+
+    return total;
+}
 
 // ADD ORDER
 
 const addOrder = function(product) {
 
     const price = product.price * quantityInput.value;
-    
     const newOrder = new BasketOrder(product.name, price, quantityInput.value, product.currency);
 
     basketOrders.push(newOrder);
@@ -153,6 +163,11 @@ const updateBasket = function(coffee) {
 
         deleteOrder(basketOrders, coffee);
         addOrder(coffee);
+    }
+
+    if (manageBtn.classList.contains('manage__btn--complete')) {
+
+        console.log('order complete')
     }
 
     // const price = coffee.price * quantityInput.value;
@@ -185,15 +200,11 @@ const displayBasket = function() {
             return acc + curr;
         })
 
-        const price = basketOrders.map(function(order) {
-            return order.price;
-        }).reduce(function(acc, curr) {
-            return acc + curr;
-        })
+        const total = calculateTotalPrice(basketOrders);
 
         btnBasket.style.display = 'grid';
         basketQuantity.textContent = quantity;
-        basketPrice.textContent = formatCurrency(price, selectedCoffee.locale, selectedCoffee.currency);
+        basketPrice.textContent = formatCurrency(total, locale, currency);
     }
 }
 
@@ -227,7 +238,7 @@ const displayManageSection = function(coffee, quantity, ordered) {
     quantityInput.value = quantity;
     btnBasket.style.display = 'none';
 
-    const coffeePrice = formatCurrency(coffee.price, coffee.locale, coffee.currency);
+    const coffeePrice = formatCurrency(coffee.price, locale, currency);
     manageProduct.textContent = coffee.name;
     managePrice.textContent = coffeePrice;
     btnPrice.textContent = coffeePrice;
@@ -235,7 +246,7 @@ const displayManageSection = function(coffee, quantity, ordered) {
 
 // OPEN BASKET
 
-const displayBasketOrders = function() {
+const displayBasketOrders = function(orders) {
 
     header.style.display = 'none';
     productsSection.style.display = 'none';
@@ -247,6 +258,33 @@ const displayBasketOrders = function() {
     manageTitle.textContent = 'Basket';
     btnOrder.textContent = 'Complete order';
     btnPrice.textContent = 'price';
+
+    orderRows.innerHTML = '';
+
+    orders.forEach(function(order) {
+        
+        const quantity = order.quantity;
+        const product = order.name;
+        const price = formatCurrency(order.price, locale, currency);
+        
+        const orderRow = `
+            <div class="order__row">
+                <div class="order__row--product">
+                    <span class="product__quantity">${quantity}</span>
+                    <span class="product__name">${product}</span>
+                </div>
+                <div class="order__row--price">${price}</div>
+            </div>
+        `
+
+        orderRows.insertAdjacentHTML('beforeend', orderRow);
+    })
+
+    const total = calculateTotalPrice(orders);
+
+    totalPrice.textContent = formatCurrency(total, locale, currency);
+    manageBtn.classList = 'btn manage__btn manage__btn--complete';
+    btnPrice.textContent = formatCurrency(total, locale, currency);
 }
 
 // SELECTING COFFEE
@@ -282,7 +320,7 @@ productsSection.addEventListener('click', function(ev) {
 
 coffeeData.forEach(function(coffee) {
 
-    const coffeePrice = formatCurrency(coffee.price, coffee.locale, coffee.currency);
+    const coffeePrice = formatCurrency(coffee.price, locale, currency);
     
     const coffeeSelector = `
         <div class="coffee" data-tab="${coffee.name}">
@@ -332,8 +370,6 @@ btnRemove.addEventListener('click', function(ev) {
 btnBasket.addEventListener('click', function(ev) {
     ev.preventDefault();
 
-    displayBasketOrders();
+    displayBasketOrders(basketOrders);
 })
-
-displayBasketOrders();
 
