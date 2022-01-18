@@ -351,6 +351,25 @@ select {
     outline: none;
  }
 
+/* COMPLETE REFERENCE */
+
+.complete__reference {
+    height: 75vh;
+    position: absolute;
+    left: 0;
+    bottom: -100%;
+    background: #fff;
+    transition: bottom 500ms ease-out;
+    font-size: 1.75rem;
+    text-align: center;
+    color: var(--on-surface-dark-clr);
+    padding: 1.5rem;
+}
+
+.complete__reference--active {
+    bottom: 0;
+}
+
 /* MOBILE */
 
 @media only screen and (min-width: 1200px) {

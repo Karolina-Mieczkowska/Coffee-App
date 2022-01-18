@@ -27,6 +27,9 @@ const manageQuantity = document.querySelector('.manage__quantity');
 const manageOrders = document.querySelector('.manage__orders');
 const orderRows = document.querySelector('.order__rows');
 const totalPrice = document.querySelector('.total__price');
+const tableNumber = document.querySelector('.table__number');
+const tableSelect = document.querySelector('.table__number--select');
+const orderTable = document.querySelector('.order__table');
 
 const locale = 'en-UK';
 const currency = 'GBP';
@@ -152,7 +155,9 @@ const deleteOrder = function(orders, product) {
 
 // UPDATE BASKET
 
-const updateBasket = function(coffee) {
+let orderComplete = false;
+
+const updateOrder = function(coffee) {
 
     if (manageBtn.classList.contains('manage__btn--add')) {
 
@@ -167,7 +172,9 @@ const updateBasket = function(coffee) {
 
     if (manageBtn.classList.contains('manage__btn--complete')) {
 
-        console.log('order complete')
+        console.log('order complete');
+        orderComplete = true;
+        btnBasket.innerHTML = 'Your order';
     }
 
     // const price = coffee.price * quantityInput.value;
@@ -188,7 +195,7 @@ const displayProductsSection = function() {
 
 // DISPLAY BASKET
 
-const displayBasket = function() {
+const displayReference = function() {
 
     if (basketOrders.length > 0) {
 
@@ -202,7 +209,7 @@ const displayBasket = function() {
 
         const total = calculateTotalPrice(basketOrders);
 
-        btnBasket.style.display = 'grid';
+        btnBasket.style.display = !orderComplete ? 'grid' : 'block';
         basketQuantity.textContent = quantity;
         basketPrice.textContent = formatCurrency(total, locale, currency);
     }
@@ -244,6 +251,33 @@ const displayManageSection = function(coffee, quantity, ordered) {
     btnPrice.textContent = coffeePrice;
 }
 
+// OPEN ITEM MANAGE SECTION
+
+let selectedCoffee;
+
+const openItem = function(clicked) {
+
+    if (!orderComplete) {
+
+        selectedCoffee = coffeeData.find(function(coffee) {
+            return coffee.name === clicked.dataset.tab;
+        })
+        const coffeeOrdered = basketOrders.find(function(order) {
+            return order.name === selectedCoffee.name;
+        });
+        console.log(coffeeOrdered)
+        let ordered;
+        if (!coffeeOrdered) {
+            displayManageSection(selectedCoffee, 1, ordered = false);
+        } else {
+            displayManageSection(coffeeOrdered, coffeeOrdered.quantity, ordered = true);
+        }
+    } else {
+
+        displayCompleteReference();
+    }
+}
+
 // OPEN BASKET
 
 const displayBasketOrders = function(orders) {
@@ -254,11 +288,8 @@ const displayBasketOrders = function(orders) {
     manageQuantity.style.display = 'none';
     manageOrders.style.display = 'block';
     btnBasket.style.display = 'none';
-
-    manageTitle.textContent = 'Basket';
     btnOrder.textContent = 'Complete order';
     btnPrice.textContent = 'price';
-
     orderRows.innerHTML = '';
 
     orders.forEach(function(order) {
@@ -268,7 +299,7 @@ const displayBasketOrders = function(orders) {
         const price = formatCurrency(order.price, locale, currency);
         
         const orderRow = `
-            <div class="order__row">
+            <div class="order__row" data-tab="${product}">
                 <div class="order__row--product">
                     <span class="product__quantity">${quantity}</span>
                     <span class="product__name">${product}</span>
@@ -281,39 +312,49 @@ const displayBasketOrders = function(orders) {
     })
 
     const total = calculateTotalPrice(orders);
-
     totalPrice.textContent = formatCurrency(total, locale, currency);
-    manageBtn.classList = 'btn manage__btn manage__btn--complete';
     btnPrice.textContent = formatCurrency(total, locale, currency);
+
+    if (!orderComplete) {
+
+        manageTitle.textContent = 'Basket';
+        manageBtn.classList = 'btn manage__btn manage__btn--complete';
+    } else {
+
+        const tableOutput = document.createElement('output');
+        tableOutput.innerHTML = tableSelect.value;
+        manageTitle.textContent = 'Your Order';
+        tableSelect.style.display = 'none';
+        tableNumber.appendChild(tableOutput);
+        manageBtn.style.display = 'none';
+    }
 }
 
-// SELECTING COFFEE
+// DISPLAY COMPLETE ORDER REFERENCE
 
-let selectedCoffee;
+const displayCompleteReference = function() {
+
+    console.log('order complete reference')
+
+    const completeReference = `
+        <div class="complete__reference">
+            <p>Your order has been placed. Please refresh the page to place another one.</p>
+        </div>
+    `;
+    main.insertAdjacentHTML('beforeend', completeReference);
+
+    setTimeout(() => {
+        document.querySelector('.complete__reference').classList.add('complete__reference--active');
+    }, 100);
+
+}
+
+// SELECTING COFFEE 
 
 productsSection.addEventListener('click', function(ev) {
 
     const clicked = ev.target.closest('.coffee');
-
-    selectedCoffee = coffeeData.find(function(coffee) {
-        return coffee.name === clicked.dataset.tab;
-    })
-
-    const coffeeOrdered = basketOrders.find(function(order) {
-        
-        return order.name === selectedCoffee.name;
-    });
-
-    console.log(coffeeOrdered)
-    let ordered;
-
-    if (!coffeeOrdered) {
-
-        displayManageSection(selectedCoffee, 1, ordered = false);
-    } else {
-
-        displayManageSection(coffeeOrdered, coffeeOrdered.quantity, ordered = true);
-    }
+    openItem(clicked);
 })
 
 // DISPLAY COFFEE
@@ -350,9 +391,9 @@ quantityButtons.forEach(function(button) {
 manageBtn.addEventListener('click', function(ev) {
     ev.preventDefault();
 
-    updateBasket(selectedCoffee);
+    updateOrder(selectedCoffee);
     displayProductsSection();
-    displayBasket();
+    displayReference();
 })
 
 // REMOVE FROM ORDER
@@ -362,7 +403,7 @@ btnRemove.addEventListener('click', function(ev) {
 
     deleteOrder(basketOrders, selectedCoffee);
     displayProductsSection();
-    displayBasket();
+    displayReference();
 })
 
 // SELECT BASKET
@@ -373,3 +414,34 @@ btnBasket.addEventListener('click', function(ev) {
     displayBasketOrders(basketOrders);
 })
 
+// SELECT BASKET ITEM
+
+orderRows.addEventListener('click', function(ev) {
+    ev.preventDefault();
+
+    const clicked = ev.target.closest('.order__row');
+    console.log(clicked);
+
+    openItem(clicked);
+
+    // selectedCoffee = coffeeData.find(function(coffee) {
+    //     return coffee.name === clicked.dataset.tab;
+    // })
+    // console.log(selectedCoffee);
+
+    // const coffeeOrdered = basketOrders.find(function(order) {
+        
+    //     return order.name === selectedCoffee.name;
+    // });
+
+    // console.log(coffeeOrdered)
+    // let ordered;
+
+    // if (!coffeeOrdered) {
+
+    //     displayManageSection(selectedCoffee, 1, ordered = false);
+    // } else {
+
+    //     displayManageSection(coffeeOrdered, coffeeOrdered.quantity, ordered = true);
+    // }
+})
