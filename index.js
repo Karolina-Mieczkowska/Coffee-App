@@ -27,9 +27,12 @@ const manageQuantity = document.querySelector('.manage__quantity');
 const manageOrders = document.querySelector('.manage__orders');
 const orderRows = document.querySelector('.order__rows');
 const totalPrice = document.querySelector('.total__price');
-const tableNumber = document.querySelector('.table__number');
+const tableOutput = document.querySelector('.table__number--output');
 const tableSelect = document.querySelector('.table__number--select');
 const orderTable = document.querySelector('.order__table');
+
+const backArrow = document.querySelector('.btn__back');
+// const tableOutputNumber = document.querySelector('.table__number--output');
 
 const locale = 'en-UK';
 const currency = 'GBP';
@@ -321,11 +324,9 @@ const displayBasketOrders = function(orders) {
         manageBtn.classList = 'btn manage__btn manage__btn--complete';
     } else {
 
-        const tableOutput = document.createElement('output');
         tableOutput.innerHTML = tableSelect.value;
         manageTitle.textContent = 'Your Order';
         tableSelect.style.display = 'none';
-        tableNumber.appendChild(tableOutput);
         manageBtn.style.display = 'none';
     }
 }
@@ -423,25 +424,13 @@ orderRows.addEventListener('click', function(ev) {
     console.log(clicked);
 
     openItem(clicked);
+})
 
-    // selectedCoffee = coffeeData.find(function(coffee) {
-    //     return coffee.name === clicked.dataset.tab;
-    // })
-    // console.log(selectedCoffee);
+// GO BACK
 
-    // const coffeeOrdered = basketOrders.find(function(order) {
-        
-    //     return order.name === selectedCoffee.name;
-    // });
+backArrow.addEventListener('click', function(ev) {
+    ev.preventDefault();
 
-    // console.log(coffeeOrdered)
-    // let ordered;
-
-    // if (!coffeeOrdered) {
-
-    //     displayManageSection(selectedCoffee, 1, ordered = false);
-    // } else {
-
-    //     displayManageSection(coffeeOrdered, coffeeOrdered.quantity, ordered = true);
-    // }
+    displayProductsSection();
+    displayReference();
 })
