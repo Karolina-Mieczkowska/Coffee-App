@@ -160,6 +160,7 @@ body {
     padding: .75rem;
     color: tomato;
     background: none;
+    width: 100%;
 }
 
 .btn__price {
@@ -176,7 +177,6 @@ body {
     background: var(--btn-clr);
     font-size: 1.5rem;
     padding: 1rem;
-    justify-content: space-between;
     text-align: left;
     color: #fff;
     display: none;
@@ -372,6 +372,36 @@ select {
 
 /* MOBILE */
 
+@media only screen and (min-width: 576px) {
+
+    .products {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+} 
+
+@media only screen and (min-width: 768px) {
+
+    .main {
+        margin: 0 auto;
+        width: 90%;
+    }
+
+    .header {
+        padding-top: 7rem;
+        text-align: center;
+    }
+
+    .header__title {
+        padding-left: 0;
+        /* padding-top: 1rem;
+        margin-top: 0; */
+    }
+    
+    .header__subtitle {
+        padding-left: 0;
+    }
+} 
+
 @media only screen and (min-width: 1200px) {
 
     body {
@@ -380,7 +410,95 @@ select {
         background-size: cover;
     }
 
-    .products {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    .main {
+        width: 70%;
     }
+
+    .products {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        cursor: pointer;
+    }
+
+    .manage {
+        height: 80vh;
+        width: 50vh;
+        top: 50%;
+        left: 50%;
+        margin-left: -25vh;
+        margin-top: -40vh;
+    }
+
+    .manage__btn {
+        cursor: pointer;
+    }
+
+    .btn__quantity {
+        cursor: pointer;
+    }
+
+    .btn__remove {
+        cursor: pointer;
+    }
+
+    .btn__basket {
+        cursor: pointer;
+        text-align: right;
+        position: absolute;
+        top: 0;
+        height: fit-content;
+        grid-template-columns: auto 64px;
+        grid-template-areas: 
+            "price quantity"
+            "reference quantity";
+    }
+
+    .basket__quantity--icon {
+        position: fixed;
+        left: 100%;
+        transform: translateX(-150%);
+        right: 1rem;
+        top: 2rem;
+    }
+
+    select {
+        cursor: pointer;
+     }
+    
+    /* .manage__title {
+        display: flex;
+        font-size: 1rem;
+        border-bottom: 3px solid #4d5c6c;
+    }
+    
+    .manage__title h2 {
+        margin: .75rem;
+    }
+    
+    .manage__form {
+        text-align: center;
+        font-size: 1.75rem;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 90%;
+    }
+    
+    .manage__quantity {
+        color: #2d363f;
+        padding: 0 1.75rem;
+    }
+    
+    .manage__product {
+        font-size: 2.25rem;
+        display: block;
+        margin-bottom: 1.25rem;
+        margin-top: 5rem;
+    }
+    
+    .manage__price {
+        display: block;
+        font-weight: 600;
+        margin: 1.25rem 0;
+    } */
 }

@@ -74,7 +74,7 @@ icedLatte = {
     price: 3.90
 }
 
-coffeeData = [espresso, doubleEspresso, americano, flatWhite, latte, icedLatte];
+coffeeData = [espresso, doubleEspresso, americano, flatWhite, cappuccino, latte, icedLatte];
 
 // ORDER DATABASE
 
@@ -231,11 +231,21 @@ const displayManageSection = function(coffee, quantity, ordered) {
         btnOrder.textContent = 'Add to order';
         btnRemove.style.display = 'none';
         manageBtn.classList = 'btn manage__btn manage__btn--add';
+        // orderRows.addEventListener('click', function(ev) {
+        //     ev.preventDefault();
+        
+        //     const clicked = ev.target.closest('.order__row');
+        //     console.log(clicked);
+        
+        //     openItem(clicked);
+        // })
+        orderRows.addEventListener('mouseover', () => orderRows.style.cursor = 'pointer');
     } else {
         manageTitle.textContent = 'Edit quantity';
         btnOrder.textContent = 'Update order';
         btnRemove.style.display = 'inline-block';
         manageBtn.classList = 'btn manage__btn manage__btn--edit';
+        orderRows.addEventListener('mouseover', () => orderRows.style.cursor = 'inherit');
     }
   
     header.style.display = 'none';
@@ -434,3 +444,11 @@ backArrow.addEventListener('click', function(ev) {
     displayProductsSection();
     displayReference();
 })
+
+// DESKTOP
+
+if (screen.width > 1200) {
+
+    backArrow.style.display = 'none';
+}
+
