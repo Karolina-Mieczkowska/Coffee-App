@@ -1,39 +1,44 @@
-const header = document.querySelector('.header')
+// FRONT PAGE
 const main = document.querySelector('.main');
+const header = document.querySelector('.header')
 const productsSection = document.querySelector('.products');
+
+// MANAGE SECTION
 const manageSection = document.querySelector('.manage');
-// const coffeeSelector = document.querySelectorAll('.coffee');
 const manageForm = document.querySelectorAll('.manage__form');
-// const main = document.querySelector('.main');
 const manageTitle = document.querySelector('.manage__title--h2');
 const manageProduct = document.querySelector('.manage__product');
-const btnPrice = document.querySelector('.btn__price');
 const managePrice = document.querySelector('.manage__price');
-
-const quantityButtons = document.querySelectorAll('.btn__quantity');
-const quantityInput = document.querySelector('.quantity__input');
-const btnMinus = document.querySelector('.btn__quantity--minus');
 const manageBtn = document.querySelector('.manage__btn');
 
+// QUANTITY
+const manageQuantity = document.querySelector('.manage__quantity');
+const quantityInput = document.querySelector('.quantity__input');
+const btnMinus = document.querySelector('.btn__quantity--minus');
+const btnPlus = document.querySelector('.btn__quantity--plus');
+const quantityButtons = document.querySelectorAll('.btn__quantity');
+const btnRemove = document.querySelector('.btn__remove');
+
+// BASKET
 const btnBasket = document.querySelector('.btn__basket');
 const basketQuantity = document.querySelector('.basket__quantity--output');
 const basketPrice = document.querySelector('.basket__price');
+const btnPrice = document.querySelector('.btn__price');
 
-const btnPlus = document.querySelector('.btn__quantity--plus');
-const btnOrder = document.querySelector('.btn__order');
-const btnRemove = document.querySelector('.btn__remove');
-
-const manageQuantity = document.querySelector('.manage__quantity');
+// ORDERS
 const manageOrders = document.querySelector('.manage__orders');
-const orderRows = document.querySelector('.order__rows');
 const totalPrice = document.querySelector('.total__price');
 const tableOutput = document.querySelector('.table__number--output');
 const tableSelect = document.querySelector('.table__number--select');
 const orderTable = document.querySelector('.order__table');
+const itemsContainer = document.querySelector('.items__container');
+const btnOrder = document.querySelector('.btn__order');
 
+// BACK
+const backSurface = document.querySelector('.btn__surface-back');
 const backArrow = document.querySelector('.btn__back');
-// const tableOutputNumber = document.querySelector('.table__number--output');
 
+// CURRENCY
 const locale = 'en-UK';
 const currency = 'GBP';
 
@@ -88,6 +93,16 @@ function BasketOrder(name, price, quantity, currency) {
 
 const basketOrders = [];
 
+// DISPLAY PRODUCTS SECTION
+
+const displayProductsSection = function() {
+
+    header.style.display = 'block';
+    productsSection.style.display = 'grid';
+    manageSection.style.display = 'none';
+    backSurface.classList = 'btn btn__surface-back btn__surface-back--inactive';
+}
+
 // FORMAT CURRENCY
 
 const formatCurrency = function (value, locale, currency) {
@@ -96,6 +111,39 @@ const formatCurrency = function (value, locale, currency) {
       currency: currency,
     }).format(value);
 };
+
+// DISPLAY MANAGE SECTION
+
+const displayManageSection = function(coffee, quantity, ordered) {
+    
+    if (!ordered) {
+        manageTitle.textContent = 'Choose Quantity';
+        btnOrder.textContent = 'Add to order';
+        btnRemove.style.display = 'none';
+        manageBtn.classList = 'btn manage__btn manage__btn--add';
+    } else {
+        manageTitle.textContent = 'Edit quantity';
+        btnOrder.textContent = 'Update order';
+        btnRemove.style.display = 'inline-block';
+        manageBtn.classList = 'btn manage__btn manage__btn--edit';
+    }
+  
+    header.style.display = 'none';
+    productsSection.style.display = 'none';
+    manageSection.style.display = 'block';
+    manageOrders.style.display = 'none';
+    manageQuantity.style.display = 'block';
+
+    quantityInput.value = quantity;
+    btnBasket.style.display = 'none';
+
+    const coffeePrice = formatCurrency(coffee.price, locale, currency);
+    manageProduct.textContent = coffee.name;
+    managePrice.textContent = coffeePrice;
+    btnPrice.textContent = coffeePrice;
+    itemsContainer.addEventListener('mouseover', ev => ev.target.closest('.order__row').style.cursor = !orderComplete ? 'pointer' : 'inherit');
+    backSurface.classList = 'btn btn__surface-back btn__surface-back--active';
+}
 
 // QUANTITY FUNCTION
 
@@ -179,21 +227,6 @@ const updateOrder = function(coffee) {
         orderComplete = true;
         btnBasket.innerHTML = 'Your order';
     }
-
-    // const price = coffee.price * quantityInput.value;
-    
-    // const newOrder = new BasketOrder(coffee.name, price, quantityInput.value, coffee.currency);
-    // basketOrders.push(newOrder);
-}
-
-// DISPLAY PRODUCTS SECTION
-
-const displayProductsSection = function() {
-
-    header.style.display = 'block';
-    productsSection.style.display = 'grid';
-    manageSection.style.display = 'none';
-    // manageSection.forEach(section => section.style.display = 'none');
 }
 
 // DISPLAY BASKET
@@ -218,50 +251,55 @@ const displayReference = function() {
     }
 }
 
-// DISPLAY MANAGE SECTION
+// OPEN BASKET
 
-const displayManageSection = function(coffee, quantity, ordered) {
+const displayBasketOrders = function(orders) {
 
-    // manageTitle.textContent = !ordered ? 'Choose Quantity' : 'Edit quantity';
-    // btnOrder.textContent = !ordered ? 'Add to order' : 'Update order';
-    // btnRemove.style.display = !ordered ? 'none' : 'inline-block';
-    
-    if (!ordered) {
-        manageTitle.textContent = 'Choose Quantity';
-        btnOrder.textContent = 'Add to order';
-        btnRemove.style.display = 'none';
-        manageBtn.classList = 'btn manage__btn manage__btn--add';
-        // orderRows.addEventListener('click', function(ev) {
-        //     ev.preventDefault();
-        
-        //     const clicked = ev.target.closest('.order__row');
-        //     console.log(clicked);
-        
-        //     openItem(clicked);
-        // })
-        orderRows.addEventListener('mouseover', () => orderRows.style.cursor = 'pointer');
-    } else {
-        manageTitle.textContent = 'Edit quantity';
-        btnOrder.textContent = 'Update order';
-        btnRemove.style.display = 'inline-block';
-        manageBtn.classList = 'btn manage__btn manage__btn--edit';
-        orderRows.addEventListener('mouseover', () => orderRows.style.cursor = 'inherit');
-    }
-  
     header.style.display = 'none';
     productsSection.style.display = 'none';
     manageSection.style.display = 'block';
-    manageOrders.style.display = 'none';
-    manageQuantity.style.display = 'block';
-    // manageSection.forEach(section => section.style.display = 'block');
-
-    quantityInput.value = quantity;
+    manageQuantity.style.display = 'none';
+    manageOrders.style.display = 'block';
     btnBasket.style.display = 'none';
+    btnOrder.textContent = 'Complete order';
+    btnPrice.textContent = 'price';
+    itemsContainer.innerHTML = '';
+    backSurface.classList = 'btn btn__surface-back btn__surface-back--active';
 
-    const coffeePrice = formatCurrency(coffee.price, locale, currency);
-    manageProduct.textContent = coffee.name;
-    managePrice.textContent = coffeePrice;
-    btnPrice.textContent = coffeePrice;
+    orders.forEach(function(order) {
+        
+        const quantity = order.quantity;
+        const product = order.name;
+        const price = formatCurrency(order.price, locale, currency);
+        
+        const orderRow = `
+            <div class="order__row" data-tab="${product}">
+                <div class="order__row--product">
+                    <span class="product__quantity">${quantity}</span>
+                    <span class="product__name">${product}</span>
+                </div>
+                <div class="order__row--price">${price}</div>
+            </div>
+        `
+
+        itemsContainer.insertAdjacentHTML('beforeend', orderRow);
+    })
+
+    const total = calculateTotalPrice(orders);
+    totalPrice.textContent = formatCurrency(total, locale, currency);
+    btnPrice.textContent = formatCurrency(total, locale, currency);
+
+    if (!orderComplete) {
+
+        manageTitle.textContent = 'Basket';
+        manageBtn.classList = 'btn manage__btn manage__btn--complete';
+    } else {
+
+        tableOutput.innerHTML = tableSelect.value;
+        manageTitle.textContent = 'Your Order';
+        tableSelect.style.display = 'none';
+        manageBtn.style.display = 'none';
+    }
 }
 
 // OPEN ITEM MANAGE SECTION
@@ -291,56 +329,6 @@ const openItem = function(clicked) {
     }
 }
 
-// OPEN BASKET
-
-const displayBasketOrders = function(orders) {
-
-    header.style.display = 'none';
-    productsSection.style.display = 'none';
-    manageSection.style.display = 'block';
-    manageQuantity.style.display = 'none';
-    manageOrders.style.display = 'block';
-    btnBasket.style.display = 'none';
-    btnOrder.textContent = 'Complete order';
-    btnPrice.textContent = 'price';
-    orderRows.innerHTML = '';
-
-    orders.forEach(function(order) {
-        
-        const quantity = order.quantity;
-        const product = order.name;
-        const price = formatCurrency(order.price, locale, currency);
-        
-        const orderRow = `
-            <div class="order__row" data-tab="${product}">
-                <div class="order__row--product">
-                    <span class="product__quantity">${quantity}</span>
-                    <span class="product__name">${product}</span>
-                </div>
-                <div class="order__row--price">${price}</div>
-            </div>
-        `
-
-        orderRows.insertAdjacentHTML('beforeend', orderRow);
-    })
-
-    const total = calculateTotalPrice(orders);
-    totalPrice.textContent = formatCurrency(total, locale, currency);
-    btnPrice.textContent = formatCurrency(total, locale, currency);
-
-    if (!orderComplete) {
-
-        manageTitle.textContent = 'Basket';
-        manageBtn.classList = 'btn manage__btn manage__btn--complete';
-    } else {
-
-        tableOutput.innerHTML = tableSelect.value;
-        manageTitle.textContent = 'Your Order';
-        tableSelect.style.display = 'none';
-        manageBtn.style.display = 'none';
-    }
-}
-
 // DISPLAY COMPLETE ORDER REFERENCE
 
 const displayCompleteReference = function() {
@@ -352,21 +340,14 @@ const displayCompleteReference = function() {
             <p>Your order has been placed. Please refresh the page to place another one.</p>
         </div>
     `;
+    
+    manageSection.style.display = 'none';
     main.insertAdjacentHTML('beforeend', completeReference);
 
     setTimeout(() => {
         document.querySelector('.complete__reference').classList.add('complete__reference--active');
     }, 100);
-
 }
-
-// SELECTING COFFEE 
-
-productsSection.addEventListener('click', function(ev) {
-
-    const clicked = ev.target.closest('.coffee');
-    openItem(clicked);
-})
 
 // DISPLAY COFFEE
 
@@ -384,6 +365,14 @@ coffeeData.forEach(function(coffee) {
     productsSection.insertAdjacentHTML('beforeend', coffeeSelector);
 })
 
+// SELECTING COFFEE 
+
+productsSection.addEventListener('click', function(ev) {
+
+    const clicked = ev.target.closest('.coffee');
+    openItem(clicked);
+})
+
 // QUANTITY BUTTONS
 
 quantityButtons.forEach(function(button) {
@@ -397,22 +386,22 @@ quantityButtons.forEach(function(button) {
     })
 });
 
-// MANAGE BUTTON
-
-manageBtn.addEventListener('click', function(ev) {
-    ev.preventDefault();
-
-    updateOrder(selectedCoffee);
-    displayProductsSection();
-    displayReference();
-})
-
 // REMOVE FROM ORDER
 
 btnRemove.addEventListener('click', function(ev) {
     ev.preventDefault();
 
     deleteOrder(basketOrders, selectedCoffee);
+    displayProductsSection();
+    displayReference();
+})
+
+// MANAGE BUTTON
+
+manageBtn.addEventListener('click', function(ev) {
+    ev.preventDefault();
+
+    updateOrder(selectedCoffee);
     displayProductsSection();
     displayReference();
 })
@@ -427,7 +416,7 @@ btnBasket.addEventListener('click', function(ev) {
 
 // SELECT BASKET ITEM
 
-orderRows.addEventListener('click', function(ev) {
+itemsContainer.addEventListener('click', function(ev) {
     ev.preventDefault();
 
     const clicked = ev.target.closest('.order__row');
@@ -440,6 +429,12 @@ orderRows.addEventListener('click', function(ev) {
 
 backArrow.addEventListener('click', function(ev) {
     ev.preventDefault();
+
+    displayProductsSection();
+    displayReference();
+})
+
+backSurface.addEventListener('click', function() {
 
     displayProductsSection();
     displayReference();
